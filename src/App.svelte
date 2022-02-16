@@ -7,8 +7,16 @@
 	import { get, writable } from 'svelte/store';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
+	import {Router, Link, Route} from "svelte-navigator";
 	import JSONTree from 'svelte-json-tree';
-	import { Tabs, Tab, TabContent, Dialog, AppBar, Button, Container, Row, Col, MaterialApp } from 'svelte-materialify';
+	import { Tabs, 
+			List,
+			Divider,
+			NavigationDrawer,
+			ListItemGroup,
+			ListItem,
+			Icon,	
+			Tab, TabContent, Dialog, AppBar, Button, Container, Row, Col, MaterialApp } from 'svelte-materialify';
 
 	const options = {
 		duration: 2000
@@ -96,53 +104,81 @@
 <main>
 
 	<MaterialApp theme={'light'}>
-		<AppBar>
-			<div slot="title">Coin Market Cap API Demo</div>
-		</AppBar>
-		<Tabs centerActive>
-			<div slot="tabs">
-				<Tab>Cryptocurrency</Tab>
-				<Tab>Category</Tab>
+		<Router>
+			
+		<div>
+			<NavigationDrawer absolute class="teal theme--dark">
+				<h4 class="text-h5 mb-2 mt-2 font-weight-bold text-center">API DEMO</h4>
+				<Divider />
+				<List nav dense>
+				<ListItemGroup>
+					<ListItem link>
+						<Link to="/">
+							<span class="font-weight-medium">
+								Coin Market Cap
+							</span>
+						</Link>
+					</ListItem>
+					<ListItem link>
+						<span class="font-weight-medium">
+							CoinGecko
+						</span>
+					</ListItem>
+				</ListItemGroup>
+				</List>
+			</NavigationDrawer>
+			<div style="margin-left: 256px;">
+				<Route path="/">
+				</Route>
+				<Route path="coingecko"
+				<Tabs centerActive>
+					<div slot="tabs">
+						<Tab>Cryptocurrency</Tab>
+						<Tab>Category</Tab>
+					</div>
+					<TabContent>
+						<Container>
+							<Row>
+								<Col cols={4}>
+									<JSONTree value={oriCryptoData} />
+									<div class="left_align">
+									</div>
+								</Col>
+								<Col cols={8}>
+									<Table tableData={$gridCryptoData}/>
+									<div class="center_align">
+										<Button on:click={loadMoreCrtptoEventHandler}> {"load more"} </Button>
+									</div>
+								</Col>
+							</Row>
+						</Container>
+					</TabContent>
+					<TabContent>
+						<Container>
+							<Row>
+								<Col cols={4}>
+									<JSONTree value={oriCryptoCategoriesData} />
+									<div class="left_align">
+									</div>
+								</Col>
+								<Col cols={8}>
+									<Table tableData={$gridCryptoCategoriesData} clickable={true} clickEvent={openCoinListPopup}/>
+									<div class="center_align">
+										<Button on:click={loadMoreCrtptoCategoriesEventHandler}> {"load more"} </Button>
+									</div>
+								</Col>
+							</Row>
+						</Container>
+					</TabContent>
+				</Tabs>
 			</div>
-			  <TabContent>
-				<Container>
-					<Row>
-						<Col cols={4}>
-							<JSONTree value={oriCryptoData} />
-							<div class="left_align">
-							</div>
-						</Col>
-						<Col cols={8}>
-							<Table tableData={$gridCryptoData}/>
-							<div class="center_align">
-								<Button on:click={loadMoreCrtptoEventHandler}> {"load more"} </Button>
-							</div>
-						</Col>
-					</Row>
-				</Container>
-			  </TabContent>
-			  <TabContent>
-				<Container>
-					<Row>
-						<Col cols={4}>
-							<JSONTree value={oriCryptoCategoriesData} />
-							<div class="left_align">
-							</div>
-						</Col>
-						<Col cols={8}>
-							<Table tableData={$gridCryptoCategoriesData} clickable={true} clickEvent={openCoinListPopup}/>
-							<div class="center_align">
-								<Button on:click={loadMoreCrtptoCategoriesEventHandler}> {"load more"} </Button>
-							</div>
-						</Col>
-					</Row>
-				</Container>
-			  </TabContent>
-		  </Tabs>
+		</div>
 
+		</Router>
 		  <Dialog class="pa-4 text-center" bind:active={activeCoinListDialog}>
 			<p>This is Dialog 1</p>
 		  </Dialog>
+
 	</MaterialApp>
 		
 	<SvelteToast {options} />
@@ -150,12 +186,7 @@
 
 <style global>
 	:global(body) {
-		background-color: #202020;
-		color: #bfc2c7;
-		padding: 10px 20px;
-	}
-	div{
-		margin-top: 20px;
+		padding: 0px;
 	}
 	.center_align{
 		text-align: center;
