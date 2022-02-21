@@ -1,54 +1,55 @@
 <script>
 	import { onMount } from 'svelte';
-	import HttpClient from './utils/HttpClient';
+	import HttpClient from '../utils/HttpClient';
 	import {
 		Container,
 		Row,
 		Col,
+		Dialog,
 		Button,
 		DataTable,
 		DataTableHead,
-		Dialog,
 		DataTableRow,
 		DataTableCell,
 		DataTableBody} from 'svelte-materialify';
 	import { writable, get } from 'svelte/store';
 	import JSONTree from 'svelte-json-tree';
-	import CryptoDetailDialog from './CryptoDetailDialog.svelte';
+	import CategoryDetailDialog from './CategoryDetailDialog.svelte';
+
+	let activeCoinListDialog = false;
 
 	let dataList = writable([]);
 	let oriCryptoData;
 	let size = 20;
 	let currentPage = 1;
-	let activeCryptoDetailDialog = false;
-	let selectedCryptoId;
+	let selectedCategoryId;
 
 	onMount(() => {
-		getCryptoLatest();
+		getCryptoCategories();
 	});
 
 	/* functions 	*/
-	function getCryptoLatest(){
+	function getCryptoCategories(){
 		let httpClient = new HttpClient();
-		httpClient.doGet("/crypto/latest", {'size': size, 'currentPage': currentPage}, callbackGet.bind(this));	
+		httpClient.doGet("/crypto/categories", {'size': size, 'currentPage': currentPage}, callbackGet.bind(this));	
 	}
 
 	/* callback */
 	function callbackGet(data){
 		let list = get(dataList);
-		data.data.forEach(element => list.push(element));
+		data.data.data.forEach(element => list.push(element));
 		oriCryptoData = list;
 		dataList.set(list);
 	}
 
 	function loadMoreCrtptoEventHandler(){
 		currentPage = currentPage + 1;
-		getCryptoLatest();
+		getCryptoCategories();
 	}
-
-	function clickRow(selectedId){
-		selectedCryptoId = selectedId;
-		activeCryptoDetailDialog = true;
+	
+	function clickCategoryId(data){
+		selectedCategoryId = data.id;
+		activeCoinListDialog = true;
 	}
 
 </script>
@@ -66,19 +67,21 @@
 				  <DataTableRow>
 					<DataTableCell>ID</DataTableCell>
 					<DataTableCell>Name</DataTableCell>
-					<DataTableCell>Symbol</DataTableCell>
-					<DataTableCell>Slug</DataTableCell>
-					<DataTableCell>Tags</DataTableCell>
+					<DataTableCell>Title</DataTableCell>
+					<DataTableCell>Desc</DataTableCell>
+					<DataTableCell>Number of Tokens</DataTableCell>
+					<DataTableCell>Market Cap</DataTableCell>
 				  </DataTableRow>
 				</DataTableHead>
 				<DataTableBody>
 					{#each $dataList as data}
 						<DataTableRow>
-							<DataTableCell><span class="clickble" on:click={clickRow(data.id)}>{data.id}</span></DataTableCell>
+							<DataTableCell><span class="clickble" on:click={clickCategoryId(data)}>{data.id}</span></DataTableCell>
 							<DataTableCell>{data.name}</DataTableCell>
-							<DataTableCell>{data.symbol}</DataTableCell>
-							<DataTableCell>{data.slug}</DataTableCell>
-							<DataTableCell>{data.tags}</DataTableCell>
+							<DataTableCell>{data.title}</DataTableCell>
+							<DataTableCell>{data.description}</DataTableCell>
+							<DataTableCell>{data.num_tokens}</DataTableCell>
+							<DataTableCell>{data.market_cap}</DataTableCell>
 						</DataTableRow>
 					  {/each}
 				</DataTableBody>
@@ -88,15 +91,14 @@
 			</div>
 		</Col>
 	</Row>
-	<Dialog class="pa-4" width={1200} bind:active={activeCryptoDetailDialog}>
-		<CryptoDetailDialog cryptoId={selectedCryptoId}/>
-	</Dialog>
+	<Dialog class="pa-4" width={1200} bind:active={activeCoinListDialog}>
+		<CategoryDetailDialog categoryId={selectedCategoryId}/>
+	  </Dialog>
 </Container>
 
 
-
-
 <style>
+
 	.clickble{
 		cursor: pointer;
 		text-decoration: underline;
@@ -104,4 +106,5 @@
 	.clickble:hover{
 		font-weight: bold;
 	}
+
 </style>

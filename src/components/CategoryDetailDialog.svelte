@@ -1,20 +1,12 @@
 <script>
 	import { onMount } from 'svelte';
-	import HttpClient from './utils/HttpClient';
+	import HttpClient from '../utils/HttpClient';
 	import {
 		Container,
-		Row,
-		Col,
-		Dialog,
-		Button,
 		DataTable,
 		DataTableHead,
 		DataTableRow,
 		DataTableCell,
-		Card,
-		CardTitle,
-		Divider,
-		CardSubtitle,
 		DataTableBody} from 'svelte-materialify';
 	export let categoryId;
 
@@ -78,8 +70,6 @@
 	h2, .info_area{
 		margin: 15px 0px;
 	}
-
-	
 
 	.clickble{
 		cursor: pointer;

@@ -1,21 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import HttpClient from './utils/HttpClient';
-	import {
-		Container,
-		Row,
-		Col,
-		Dialog,
-		Button,
-		DataTable,
-		DataTableHead,
-		DataTableRow,
-		DataTableCell,
-		Card,
-		CardTitle,
-		Divider,
-		CardSubtitle,
-		DataTableBody} from 'svelte-materialify';
+	import HttpClient from '../utils/HttpClient';
 	export let cryptoId;
 
 	onMount(() => {
@@ -44,8 +29,6 @@
 	h2, .info_area{
 		margin: 15px 0px;
 	}
-
-	
 
 	.clickble{
 		cursor: pointer;

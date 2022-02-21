@@ -5,7 +5,7 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "start": "sirv public --no-clear"
+    "start": "sirv public --no-clear --single"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
@@ -20,8 +20,11 @@
   },
   "dependencies": {
     "@zerodevx/svelte-toast": "^0.6.3",
+    "chart.js": "^3.7.1",
+    "chartjs-plugin-zoom": "^1.2.0",
     "gridjs": "^5.0.2",
     "gridjs-svelte": "^2.1.0",
+    "moment": "^2.29.1",
     "sirv-cli": "^2.0.0",
     "svelte-json-tree": "^0.1.0",
     "svelte-materialify": "^0.3.11",
